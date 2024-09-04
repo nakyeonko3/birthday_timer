@@ -1,5 +1,6 @@
-const D_DATE = "2024-09-05T00:00:00";
-const D_DATE_OBJ = new Date(D_DATE);
+const D_DATE = "2024-09-04T21:13:00";
+const D_DAY_CLOCK_ELEM_NAME = ".js-clock";
+const CAKE_CONTAINER_ELEM_NAME = ".cakeSvg-container";
 
 function toTwoDigit(number) {
   return parseInt(number) < 10 ? `0${number}` : `${number}`;
@@ -14,38 +15,58 @@ const TIME = {
 
 const dayOfweekObj = {
   0: "일",
-  1: `월`,
-  2: `화`,
-  3: `수`,
-  4: `목`,
-  5: `금`,
-  6: `토`,
-  7: `일`,
+  1: "월",
+  2: "화",
+  3: "수",
+  4: "목",
+  5: "금",
+  6: "토",
+  7: "일",
 };
 
-const getDayOfWeek = (day) => {
-  return dayOfweekObj[day];
+const getDayOfWeek = (day) => dayOfweekObj[day];
+
+const formatDDayClock = ({ hours, minutes, seconds }) =>
+  `${toTwoDigit(hours)}:${toTwoDigit(minutes)}:${toTwoDigit(seconds)}`;
+
+const hideClock = () => {
+  const clockElement = document.querySelector(D_DAY_CLOCK_ELEM_NAME);
+  clockElement.classList.add("disable");
 };
 
-const formatDDayClock = ({ hours, minutes, seconds }) => {
-  return `${toTwoDigit(hours)}:${toTwoDigit(minutes)}:${toTwoDigit(seconds)}`;
+const showCakeSVG = () => {
+  const cakeSVGContainer = document.querySelector(CAKE_CONTAINER_ELEM_NAME);
+  cakeSVGContainer.classList.remove("disable");
 };
 
 const renderDDayClock = () => {
-  const h2_clock = document.querySelector(".js-clock");
+  const clockElement = document.querySelector(D_DAY_CLOCK_ELEM_NAME);
+  const end = new Date(D_DATE);
+
+  if (isNaN(end.getTime())) {
+    console.error("Invalid date format");
+    return;
+  }
 
   function runDDayClock() {
     const now = new Date();
-    const end = D_DATE_OBJ;
-    const TIME_DISTANCE = end - now;
-    // const days = Math.floor(TIME_DISTANCE / TIME.DAY);
-    const hours = Math.floor((TIME_DISTANCE % TIME.DAY) / TIME.HOUR);
-    const minutes = Math.floor((TIME_DISTANCE % TIME.HOUR) / TIME.MINUTE);
-    const seconds = Math.floor((TIME_DISTANCE % TIME.MINUTE) / TIME.SECOND);
-    h2_clock.innerHTML = formatDDayClock({ hours, minutes, seconds });
+    const time_distance = end - now;
+
+    if (time_distance <= 0) {
+      clearInterval(timerInterval);
+      hideClock();
+      showCakeSVG();
+      return;
+    }
+
+    const hours = Math.floor((time_distance % TIME.DAY) / TIME.HOUR);
+    const minutes = Math.floor((time_distance % TIME.HOUR) / TIME.MINUTE);
+    const seconds = Math.floor((time_distance % TIME.MINUTE) / TIME.SECOND);
+
+    clockElement.textContent = formatDDayClock({ hours, minutes, seconds });
   }
 
-  setInterval(runDDayClock, 1000);
+  const timerInterval = setInterval(runDDayClock, 1000);
 };
 
-window.addEventListener("DOMContentLoaded", () => renderDDayClock());
+window.addEventListener("DOMContentLoaded", renderDDayClock);
