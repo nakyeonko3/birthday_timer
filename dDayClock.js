@@ -1,6 +1,6 @@
-const D_DATE = "2024-09-05T00:00:00";
+const D_DATE = "2024-09-05T10:00:00";
 const D_DAY_CLOCK_ELEM_NAME = ".js-clock";
-const CAKE_CONTAINER_ELEM_NAME = ".cakeSvg-container";
+const CAKE_CONTAINER_ELEM_NAME = ".cakeSvg-container img";
 
 function toTwoDigit(number) {
   return parseInt(number) < 10 ? `0${number}` : `${number}`;
@@ -31,12 +31,17 @@ const formatDDayClock = ({ hours, minutes, seconds }) =>
 
 const hideClock = () => {
   const clockElement = document.querySelector(D_DAY_CLOCK_ELEM_NAME);
-  clockElement.classList.add("disable");
+  clockElement.style.display = "none";
 };
 
 const showCakeSVG = () => {
   const cakeSVGContainer = document.querySelector(CAKE_CONTAINER_ELEM_NAME);
-  cakeSVGContainer.classList.remove("disable");
+  cakeSVGContainer.style.display = "block";
+};
+
+const hideCake = () => {
+  const cakeSVGContainer = document.querySelector(CAKE_CONTAINER_ELEM_NAME);
+  cakeSVGContainer.style.display = "none";
 };
 
 const renderDDayClock = () => {
@@ -44,7 +49,7 @@ const renderDDayClock = () => {
   const end = new Date(D_DATE);
 
   if (isNaN(end.getTime())) {
-    console.error("Invalid date format");
+    hideClock();
     return;
   }
 
@@ -66,6 +71,7 @@ const renderDDayClock = () => {
     clockElement.textContent = formatDDayClock({ hours, minutes, seconds });
   }
 
+  hideCake();
   const timerInterval = setInterval(runDDayClock, 1000);
 };
 
