@@ -1,4 +1,4 @@
-const D_DATE = "2024-09-04T21:13:00";
+const D_DATE = "2024-09-05T00:00:00";
 const D_DAY_CLOCK_ELEM_NAME = ".js-clock";
 const CAKE_CONTAINER_ELEM_NAME = ".cakeSvg-container";
 
@@ -53,8 +53,8 @@ const renderDDayClock = () => {
     const time_distance = end - now;
 
     if (time_distance <= 0) {
-      clearInterval(timerInterval);
       hideClock();
+      clearInterval(timerInterval);
       showCakeSVG();
       return;
     }
