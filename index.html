@@ -33,13 +33,19 @@
       .cakeSvg-container {
         width: 100vw;
         height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-      svg {
-        max-width: 100%;
-        height: auto;
+
+      .cakeSvg-container img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
       }
+
       h1 {
-        font-size: 200px;
+        font-size: 20vw; /* 뷰포트 너비에 따라 조절 */
       }
     </style>
   </head>
